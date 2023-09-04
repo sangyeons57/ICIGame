@@ -19,7 +19,6 @@ namespace ICI
             if (beacon == null)
                 return;
             Beacon = beacon.transform;
-            Debug.Log("setUibeacon");
         }
 
         public static PopupBase CreatePopup(string name)
@@ -42,7 +41,6 @@ namespace ICI
 
             Instance.PopupDict.Add(result.GetType(), result);
             result.setActive(true);
-            Debug.Log("asfe0");
             return result;
         }
 

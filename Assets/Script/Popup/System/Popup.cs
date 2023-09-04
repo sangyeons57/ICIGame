@@ -18,7 +18,6 @@ namespace ICI
 
         public override void setActive(bool active)
         {
-            Debug.Log("setacitvel");
             gameObject.SetActive(active);
         }
 

@@ -7,7 +7,8 @@ public class EntryPoint : MonoBehaviour
 {
     private void Start()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("StartMenuScene");
+        MainMenuPopup.OpenPopup();
     }
 
 }

@@ -16,7 +16,6 @@ namespace ICI
     {
         static public GameObject GetResources(eResourcesPath resourcesPath, string name)
         {
-            Debug.Log(getPath(resourcesPath) + name);
             return Resources.Load<GameObject>(getPath(resourcesPath) + name);
         }
 
