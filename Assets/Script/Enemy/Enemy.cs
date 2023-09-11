@@ -5,18 +5,16 @@ using UnityEngine;
 
 namespace ICI
 {
-    public class Enemy : TurnObserver, IApplyPos<Enemy>
+    public class Enemy : TurnObserver, IApplyPos<Enemy>, IBaseLifeInfo
     {
         public Pos pos;
 
         public GameObject instance;
 
-        public int hp;
+        public int hp { get; set; }
 
         public int speed { get; set; }
         public float turnPercent { get; set; }
-
-        AITrace aiTrace;
 
         public Enemy(Pos pos, int hp, int speed)
         {
@@ -26,8 +24,6 @@ namespace ICI
             this.speed = speed;
             this.turnPercent = 0;
 
-            SpeedCounter.Instance.addCounterListener(this);
-            aiTrace = new AITrace(this.pos, 7, 1);
         }
 
         public Enemy setInstance(string name)
@@ -44,48 +40,23 @@ namespace ICI
             return this;
         }
 
-        private EnemyImmediateAttack_position attack()
+
+
+        virtual public void action() { }
+
+
+        virtual public void startOwnTurn() { }
+
+        virtual public void endOwnTurn() { }
+
+        public void attacked(int damage)
         {
-            Pos[] pos = new Pos[]{
-                this.pos,
-                Pos.Front()+this.pos,
-                Pos.Right()+this.pos,
-                Pos.Left()+this.pos,
-                Pos.Back()+this.pos
-            };
-            return EnemyImmediateAttack_position.Attack(2,pos, 0);
+            throw new System.NotImplementedException();
         }
 
-
-        public void action()
+        public void dead()
         {
-            Pos pos = aiTrace.setObjectPos(this.pos).Action();
-
-            Debug.Log(aiTrace.isReachTarget);
-            if (aiTrace.isReachTarget)
-            {
-                Debug.Log("attack");
-                attack();
-            }
-            else
-            {
-                Debug.Log("move");
-                if(pos is not null) this.pos += pos;
-                applyInstancePos();
-            }
-
-            SpeedCounter.Instance.finishAction();
+            throw new System.NotImplementedException();
         }
-
-
-        public void startOwnTurn()
-        {
-        }
-
-        public void endOwnTurn()
-        {
-
-        }
-
     }
 }

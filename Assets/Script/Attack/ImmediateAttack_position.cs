@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace ICI
 {
-    public class EnemyImmediateAttack_position : DelayAction
+    public class ImmediateAttack_position : DelayAction
     {
         private int damage;
         private Pos[] attackRange;
@@ -17,22 +19,26 @@ namespace ICI
 
         private List<GameObject> markedPos;
 
+        Func<Pos,IBaseLifeInfo[]> FgetTargetObjects;
+
         //cc스킬등 도 추가
 
-        private EnemyImmediateAttack_position
-            (int damage, Pos[] attackRange, int beforeDelay)
+        private ImmediateAttack_position
+            (int damage, Pos[] attackRange, Func<Pos,IBaseLifeInfo[]> FgetTargetObjects ,int beforeDelay)
         {
             this.damage = damage;
             this.attackRange = attackRange;
+
+            this.FgetTargetObjects = FgetTargetObjects;
 
             this.delay = beforeDelay;
 
             markedPos = new List<GameObject>();
         }
-        static public EnemyImmediateAttack_position Attack(int damage, Pos[] attackRange, int beforeDelay = 0)
+        static public ImmediateAttack_position Attack(int damage, Pos[] attackRange, Func<Pos,IBaseLifeInfo[]> FgetTargetObjects, int beforeDelay = 0)
         {
-            EnemyImmediateAttack_position attackClassInstance =
-                new EnemyImmediateAttack_position(damage, attackRange, beforeDelay);
+            ImmediateAttack_position attackClassInstance =
+                new ImmediateAttack_position(damage, attackRange, FgetTargetObjects, beforeDelay);
 
             attackClassInstance.Start();
 
@@ -53,12 +59,12 @@ namespace ICI
             //공격
             foreach (Pos pos in attackRange)
             {
-                List<Character> characters = CharactersMap.Instance.getCharactersByPos(pos);
-                if (characters.Count != 0)
+                IBaseLifeInfo[] targets = FgetTargetObjects(pos); 
+                if (targets.Length != 0)
                 {
-                    foreach (Character character in characters)
+                    foreach (IBaseLifeInfo target in targets)
                     {
-                        character.attacked(this.damage);
+                        target.attacked(this.damage);
                     }
                 }
             }

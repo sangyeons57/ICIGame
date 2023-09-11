@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace ICI
 {
-    public class Character : TurnObserver, IApplyPos<Character>
+    public class Character : TurnObserver, IApplyPos<Character>, IBaseLifeInfo
     {
         public Pos pos;
 
         public GameObject instance;
 
-        public int hp;
+        public int hp { get; set; }
 
         public int level;
 
