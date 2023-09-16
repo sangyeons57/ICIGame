@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.Windows.Speech;
 
 namespace ICI
@@ -15,60 +16,86 @@ namespace ICI
 
         Pos move;
 
-        string target;
+        Type[] targetList;
+
+        int maxDistance;
+        int moveCount;
 
         int damage;
-        Condition condition;
+
+        bool penetrate;
+
+        bool isActivate;
 
         public float turnPercent { get; set; }
         public int speed { get; set; } = 1;
 
-        public Projectile(Transform pos, Pos move, string path)
-            : this(new Pos((int)pos.position.x, (int)pos.position.z), move, path)
-        {
-
-        }
-
-        public Projectile(Pos pos, Pos move, string path)
+        private Projectile(Pos pos, Pos move, int damage, int maxDistance, bool penetrate,int speed, Type[] targets)
         {
             this.pos = new Pos(pos); 
             this.move = new Pos(move);
 
-            setResource(path);
-            
+            this.damage = damage;
+
+            this.maxDistance = maxDistance;
+            this.moveCount = 0;
+            this.penetrate = penetrate;
+
+            this.turnPercent = 0;
+            this.speed = speed;
+
+            this.targetList = targets;
+
+            this.isActivate = true;
 
             SpeedCounter.Instance.addCounterListener(this);
+            Debug.Log(speed);
+        }
+        static public Projectile Attack(Pos pos, Pos move, int damage, int maxDistance, bool penetrate, int speed, params Type[] targets)
+        {
+            Projectile attackClassInstance = new Projectile(pos, move, damage, maxDistance, penetrate, speed, targets);
+
+
+            return attackClassInstance;
         }
 
 
 
         private void Move()
         {
+            Debug.Log("Move");
+            if (!isActivate) return; 
             this.pos += move;
+            moveCount++;
         }
 
-        public void setTarget(string target)
-        {
-            this.target = target;
-        }
-
-        public void setAttack(int damage, Condition condition)
-        {
-            this.damage = damage;
-            this.condition = condition;
-
-        }
-
-
-        private void setResource(string path)
+        public Projectile setResource(string path)
         {
             GameObject resource = Resources.Load<GameObject>("Prefabs/" + path);
-            this.instance = GameObject.Instantiate(resource,Vector2.zero, Quaternion.identity);
+            this.instance = GameObject.Instantiate(resource, Pos.Pos2Vector(this.pos), Quaternion.identity);
+            applyInstancePos();
 
+            return this;
+        }
+
+        public void setResource(GameObject resource)
+        {
+            this.instance = GameObject.Instantiate(resource, Pos.Pos2Vector(this.pos), Quaternion.identity);
             applyInstancePos();
         }
 
-        public bool isCollision(string collisionType, Pos pos) => (collisionType == target && this.pos.Equals(pos));
+        private List<IBaseLifeInfo> getListOfTargets()
+        {
+            List<IBaseLifeInfo> answer = new List<IBaseLifeInfo>();
+            foreach (Type type in targetList)
+            {
+                if (type == typeof(Character))
+                    answer.AddRange(CharactersMap.Instance.getCharactersByPos(this.pos));
+                else if (type == typeof(Enemy))
+                    answer.AddRange(EnemysMap.Instance.getCharactersByPos(this.pos));
+            }
+            return answer;
+        }
 
         public Projectile applyInstancePos()
         {
@@ -76,18 +103,40 @@ namespace ICI
             return this;
         }
 
-        public void attack(ref int hp)
+        private void attack(List<IBaseLifeInfo> attackTargets)
         {
-            hp -= damage;
-            // condition  작동
+            if(!isActivate) return;
+            foreach(IBaseLifeInfo target in attackTargets)
+            {
+                target.attacked(damage);
+            }
+            if (penetrate == false) DeleteProcess();
+        }
+        
+        private void DeleteProcess()
+        {
+            SpeedCounter.Instance.removeCounterListener(this);
+            this.isActivate = false;
+            GameObject.Destroy(instance);
         }
 
         public void action()
         {
+            Debug.Log("action");
+            //현제위치 공격
+            List<IBaseLifeInfo> attackTargets = getListOfTargets();
+            if (attackTargets.Count > 0) attack(attackTargets);
+
             Move();
             applyInstancePos();
 
+            //이동위치 공격
+            attackTargets = getListOfTargets();
+            if (attackTargets.Count > 0) attack(attackTargets);
+
             SpeedCounter.Instance.finishAction();
+
+            if(moveCount > maxDistance) DeleteProcess();
         }
 
         public void startOwnTurn()

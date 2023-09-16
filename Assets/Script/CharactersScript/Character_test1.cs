@@ -16,10 +16,8 @@ namespace ICI
 
         public override void action_Skill1()
         {
-            Projectile projectile = new Projectile(this.pos, Pos.Front(), "Sphere");
-            projectile.speed = 10;
-            projectile.setTarget("Enemy");
-            projectile.setAttack(1, new Condition());
+            Projectile projectile = Projectile.Attack(this.pos, Pos.Front(), 10, 0, false, 10, typeof(Enemy));
+            projectile.setResource("Sphere");
 
             SpeedCounter.Instance.finishAction();
 

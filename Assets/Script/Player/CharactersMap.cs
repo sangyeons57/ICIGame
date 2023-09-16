@@ -43,6 +43,50 @@ namespace ICI
             return list;
         }
 
+        public List<T> getCharactersByPos<T>(Pos pos) where T : class
+        {
+            List<T> list = new List<T>();
+            foreach (Character mapItem in Map)
+            {
+                if (mapItem.pos.Equals(pos))
+                {
+                    list.Add(mapItem as T);
+                }
+            }
+            return list;
+        }
+
+        public List<Character> getCharactersByPoses(List<Pos> poses)
+        {
+            List<Character> list = new List<Character>();
+            foreach(Pos pos in poses)
+            {
+                foreach(Character mapItem in Map)
+                {
+                    if(mapItem.pos.Equals(pos))
+                    {
+                        list.Add(mapItem);
+                    }
+                }
+            }
+            return list;
+        }
+        public List<T> getCharactersByPoses<T>(List<Pos> poses) where T : class
+        {
+            List<T> list = new List<T>();
+            foreach (Pos pos in poses)
+            {
+                foreach (Character mapItem in Map)
+                {
+                    if (mapItem.pos.Equals(pos))
+                    {
+                        list.Add(mapItem as T);
+                    }
+                }
+            }
+            return list;
+        }
+
         public bool isCharacterExist(Pos pos)
         {
             foreach (Character mapItem in Map)

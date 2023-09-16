@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ICI
@@ -13,11 +14,11 @@ namespace ICI
             : base(pos, hp, speed)
         {
             aiTrace = new AITrace(this.pos, 7, 1);
-            SpeedCounter.Instance.addCounterListener(this);
         }
 
-        private ImmediateAttack_position attack()
+        private Projectile attack()
         {
+            /** ImmediateAttack_position
             Pos[] pos = new Pos[]{
                 this.pos,
                 Pos.Front()+this.pos,
@@ -27,6 +28,15 @@ namespace ICI
             };
             Func<Pos, IBaseLifeInfo[]> getObjectFunc = (Pos pos) => CharactersMap.Instance.getCharactersByPos(pos).ToArray();
             return ImmediateAttack_position.Attack(2,pos, getObjectFunc,0);
+
+            ImmediateAttack_object
+            return ImmediateAttack_object.Attack(10, 
+            CharactersMap.Instance.getCharactersByPoses<IBaseLifeInfo>(pos.ToList<Pos>()), 0);
+            */
+
+            Projectile projectile = Projectile.Attack(this.pos, Pos.Front(), 10, 100, false, 10, typeof(Character));
+            projectile.setResource("Sphere");
+            return projectile;
         }
 
         override public void action()

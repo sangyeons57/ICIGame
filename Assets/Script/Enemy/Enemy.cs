@@ -24,6 +24,8 @@ namespace ICI
             this.speed = speed;
             this.turnPercent = 0;
 
+            SpeedCounter.Instance.addCounterListener(this);
+            EnemysMap.Instance.addEnemy(this);
         }
 
         public Enemy setInstance(string name)
