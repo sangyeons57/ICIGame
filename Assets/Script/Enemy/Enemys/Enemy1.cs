@@ -16,7 +16,7 @@ namespace ICI
             aiTrace = new AITrace(this.pos, 7, 1);
         }
 
-        private Projectile attack()
+        private void attack()
         {
             /** ImmediateAttack_position
             Pos[] pos = new Pos[]{
@@ -33,10 +33,23 @@ namespace ICI
             return ImmediateAttack_object.Attack(10, 
             CharactersMap.Instance.getCharactersByPoses<IBaseLifeInfo>(pos.ToList<Pos>()), 0);
             */
+            Pos[] directionList = new Pos[]
+            {
+                Pos.Front(),
+                Pos.Back(),
+                Pos.Right(),
+                Pos.Left(),
+            };
+            Projectile projectile = null;
+            foreach (Pos direction in directionList)
+            {
+                if (CharactersMap.Instance.isCharacterExist(Pos.Range(this.pos, direction, 7)))
+                {
+                    projectile = Projectile.Attack(this.pos, direction, 10, 100, false, 10, typeof(Character));
+                    projectile.setResource("Sphere");
+                }
+            }
 
-            Projectile projectile = Projectile.Attack(this.pos, Pos.Front(), 10, 100, false, 10, typeof(Character));
-            projectile.setResource("Sphere");
-            return projectile;
         }
 
         override public void action()

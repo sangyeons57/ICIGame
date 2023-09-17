@@ -59,6 +59,24 @@ namespace ICI
             return new Pos(A.x - B.x, A.z - B.z);
         }
 
+        public static Pos operator *(Pos A, int B)
+        {
+            return new Pos(A.x * B, A.z * B);
+        }
+        public static Pos operator *(int A, Pos B)
+        {
+            return new Pos(A * B.x, A * B.z);
+        }
+        public static List<Pos> Range(Pos startingPoint, Pos direction, int range)
+        {
+            List<Pos> result = new List<Pos>();
+            for (int i = 0; i < range; i++)
+            {
+                result.Add(startingPoint + (direction * i));
+            }
+            return result;
+        }
+
         public override bool Equals (object other)
         {
             if (other == null) return false;

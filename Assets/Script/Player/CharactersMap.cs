@@ -91,11 +91,23 @@ namespace ICI
         {
             foreach (Character mapItem in Map)
             {
-                if (mapItem.pos.x == pos.x && mapItem.pos.z == pos.z)
-                    Debug.Log("same~~~~~~~~~~~~~~~~");
                 if (mapItem.Equals(pos))
                 {
                     return true;
+                }
+            }
+            return false;
+        }
+        public bool isCharacterExist(List<Pos> posList)
+        {
+            foreach (Pos pos in posList)
+            {
+                foreach(Character mapItem in Map)
+                {
+                    if (mapItem.pos.Equals(pos))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
