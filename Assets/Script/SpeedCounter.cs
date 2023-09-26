@@ -218,6 +218,7 @@ namespace ICI
 
                 if (delayActions[flag].delay - delayActions[flag].fullInDelay <= 0)
                 {
+                    delayActions[flag].GetType().GetMethod("functionName").Invoke;
                     delayActions[flag].action();
                     delayActions.Remove(delayActions[flag]);
                 }

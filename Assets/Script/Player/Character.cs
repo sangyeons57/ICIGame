@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace ICI
 {
-    public class Character : TurnObserver, IApplyPos<Character>, IBaseLifeInfo
+    public class Character : LifeBaseObject, TurnObserver, IApplyPos<Character>
     {
         public Pos pos;
 
         public GameObject instance;
 
-        public int hp { get; set; }
 
         public int level;
 
@@ -24,7 +23,7 @@ namespace ICI
         public Character(Pos pos, int hp, int speed, int level)
         {
             this.pos = pos;
-            this.hp = hp;
+            base.hp = hp;
 
             this.speed = speed;
             this.turnPercent = 0;
@@ -49,13 +48,8 @@ namespace ICI
             return this;
         }
 
-        public void attacked (int damage)
-        {
-            this.hp -= damage;
-            if(this.hp <= 0 ) dead();
-        }
 
-        public void dead()
+        override public void dead()
         {
             SpeedCounter.Instance.removeCounterListener(this);
             CharactersMap.Instance.removeCharacter(this);

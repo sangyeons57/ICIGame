@@ -19,12 +19,12 @@ namespace ICI
 
         private List<GameObject> markedPos;
 
-        Func<Pos,IBaseLifeInfo[]> FgetTargetObjects;
+        Func<Pos,LifeBaseObject[]> FgetTargetObjects;
 
         //cc스킬등 도 추가
 
         private ImmediateAttack_position
-            (int damage, Pos[] attackRange, Func<Pos,IBaseLifeInfo[]> FgetTargetObjects ,int beforeDelay)
+            (int damage, Pos[] attackRange, Func<Pos,LifeBaseObject[]> FgetTargetObjects ,int beforeDelay)
         {
             this.damage = damage;
             this.attackRange = attackRange;
@@ -35,7 +35,7 @@ namespace ICI
 
             markedPos = new List<GameObject>();
         }
-        static public ImmediateAttack_position Attack(int damage, Pos[] attackRange, Func<Pos,IBaseLifeInfo[]> FgetTargetObjects, int beforeDelay = 0)
+        static public ImmediateAttack_position Attack(int damage, Pos[] attackRange, Func<Pos,LifeBaseObject[]> FgetTargetObjects, int beforeDelay = 0)
         {
             ImmediateAttack_position attackClassInstance =
                 new ImmediateAttack_position(damage, attackRange, FgetTargetObjects, beforeDelay);
@@ -59,10 +59,10 @@ namespace ICI
             //공격
             foreach (Pos pos in attackRange)
             {
-                IBaseLifeInfo[] targets = FgetTargetObjects(pos); 
+                LifeBaseObject[] targets = FgetTargetObjects(pos); 
                 if (targets.Length != 0)
                 {
-                    foreach (IBaseLifeInfo target in targets)
+                    foreach (LifeBaseObject target in targets)
                     {
                         target.attacked(this.damage);
                     }

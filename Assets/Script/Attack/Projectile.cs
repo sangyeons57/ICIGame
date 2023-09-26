@@ -84,9 +84,9 @@ namespace ICI
             applyInstancePos();
         }
 
-        private List<IBaseLifeInfo> getListOfTargets()
+        private List<LifeBaseObject> getListOfTargets()
         {
-            List<IBaseLifeInfo> answer = new List<IBaseLifeInfo>();
+            List<LifeBaseObject> answer = new List<LifeBaseObject>();
             foreach (Type type in targetList)
             {
                 if (type == typeof(Character))
@@ -103,12 +103,12 @@ namespace ICI
             return this;
         }
 
-        private void attack(List<IBaseLifeInfo> attackTargets)
+        private void attack(List<LifeBaseObject> attackTargets)
         {
             if(!isActivate) return;
-            foreach(IBaseLifeInfo target in attackTargets)
+            foreach(LifeBaseObject target in attackTargets)
             {
-                target.attacked(damage);
+                Damage.Instance.Attack(target, damage);
             }
             if (penetrate == false) DeleteProcess();
         }
@@ -124,7 +124,7 @@ namespace ICI
         {
             Debug.Log("action");
             //현제위치 공격
-            List<IBaseLifeInfo> attackTargets = getListOfTargets();
+            List<LifeBaseObject> attackTargets = getListOfTargets();
             if (attackTargets.Count > 0) attack(attackTargets);
 
             Move();

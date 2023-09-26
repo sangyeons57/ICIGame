@@ -10,16 +10,16 @@ public class ImmediateAttack_object : DelayAction
     public int fullInDelay { get; set; } = 0;
 
     private int damage;
-    private List<IBaseLifeInfo> targetList;
+    private List<LifeBaseObject> targetList;
 
-    private ImmediateAttack_object(int damage, List<IBaseLifeInfo> targetList, int beforeDelay) 
+    private ImmediateAttack_object(int damage, List<LifeBaseObject> targetList, int beforeDelay) 
     { 
         this.damage = damage;
         this.targetList = targetList;
         this.delay = beforeDelay;
     }
 
-    static public ImmediateAttack_object Attack(int damage ,List<IBaseLifeInfo>targetList, int beforeDelay = 0)
+    static public ImmediateAttack_object Attack(int damage ,List<LifeBaseObject>targetList, int beforeDelay = 0)
     {
         ImmediateAttack_object attackClassInstance = 
             new ImmediateAttack_object(damage,targetList, beforeDelay);
@@ -31,7 +31,7 @@ public class ImmediateAttack_object : DelayAction
 
     public void action()
     {
-        foreach(IBaseLifeInfo element in targetList)
+        foreach(LifeBaseObject element in targetList)
         {
             element.attacked(damage);
         }

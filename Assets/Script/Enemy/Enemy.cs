@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace ICI
 {
-    public class Enemy : TurnObserver, IApplyPos<Enemy>, IBaseLifeInfo
+    public class Enemy : LifeBaseObject, TurnObserver, IApplyPos<Enemy>
     {
         public Pos pos;
 
         public GameObject instance;
 
-        public int hp { get; set; }
 
         public int speed { get; set; }
         public float turnPercent { get; set; }
@@ -19,7 +18,7 @@ namespace ICI
         public Enemy(Pos pos, int hp, int speed)
         {
             this.pos = pos;
-            this.hp = hp;
+            base.hp = hp;
 
             this.speed = speed;
             this.turnPercent = 0;
@@ -51,14 +50,8 @@ namespace ICI
 
         virtual public void endOwnTurn() { }
 
-        public void attacked(int damage)
+        override public void dead()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void dead()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
