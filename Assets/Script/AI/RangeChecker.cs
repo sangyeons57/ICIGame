@@ -92,9 +92,11 @@ namespace ICI
             foreach (Pos direction in fourDirection)
             {
                 Pos newPos = currentPos + direction;
+                if (GameMap.Instance.isWall(newPos) || GameMap.Instance.isEmpty(newPos)) continue;
 
                 // 이전체커의 위치와 같지않으면 ㅊ채커 생성
-                if (! nearCheckers[0].currentPos.Equals(newPos))
+                // 그리고 벽이아니면 채커 생성
+                if (!nearCheckers[0].currentPos.Equals(newPos))
                 {
                     createNewChecker(checkers, newPos);
                 }

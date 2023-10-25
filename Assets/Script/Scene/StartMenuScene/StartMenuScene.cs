@@ -6,6 +6,6 @@ public class StartMenuScene : MonoBehaviour
 {
     private void Start()
     {
-
+        MainMenuPopup.OpenPopup();
     }
 }

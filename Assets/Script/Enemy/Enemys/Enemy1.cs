@@ -56,15 +56,12 @@ namespace ICI
         {
             Pos pos = aiTrace.setObjectPos(this.pos).Action();
 
-            Debug.Log(aiTrace.isReachTarget);
             if (aiTrace.isReachTarget)
             {
-                Debug.Log("attack");
                 attack();
             }
             else
             {
-                Debug.Log("move");
                 if(pos is not null) this.pos += pos;
                 applyInstancePos();
             }

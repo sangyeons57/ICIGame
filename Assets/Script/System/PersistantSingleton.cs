@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ICI
@@ -24,6 +25,12 @@ namespace ICI
             }
             else if (this != Instance)
                 Destroy(Instance);
+        }
+
+        public void Reset()
+        {
+            if (Instance == null) return;
+            Destroy(Instance);
         }
     }
 }

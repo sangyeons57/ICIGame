@@ -14,7 +14,7 @@ public class MainMenuPopup : Popup<MainMenuPopup>
     public void OnClickNewGame()
     {
         ClosePopup();
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SelectLevel");
     }
 
     public void OnClickContinue()

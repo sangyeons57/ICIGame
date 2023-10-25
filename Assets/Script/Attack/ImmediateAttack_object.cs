@@ -24,7 +24,7 @@ public class ImmediateAttack_object : DelayAction
         ImmediateAttack_object attackClassInstance = 
             new ImmediateAttack_object(damage,targetList, beforeDelay);
 
-        SpeedCounter.Instance.addDelayAction(attackClassInstance);
+        SpeedCounter.Instance.addDelayAction<ImmediateAttack_object>(attackClassInstance);
 
         return attackClassInstance;
     }

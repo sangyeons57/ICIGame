@@ -11,6 +11,7 @@ namespace ICI
     {
         public int x, z;
         public readonly int valuea;
+
         public Pos(int x, int z)
         {
             this.x = x;

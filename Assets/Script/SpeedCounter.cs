@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using System.Linq;
 using Unity.VisualScripting;
+using System;
 
 namespace ICI
 {
@@ -12,7 +13,6 @@ namespace ICI
     {
         public int delay { get; }
         public int fullInDelay { get; set; }
-        void action();
     }
     public interface TurnObserver
     {
@@ -25,8 +25,10 @@ namespace ICI
         public void action();
     }
 
-    class SpeedCounter : PersistantSingleton<SpeedCounter>
+    public class SpeedCounter : MonoBehaviour
     {
+        public static SpeedCounter Instance { get; private set; } = null;
+
         private bool isTurnCounting;
 
         TurnObserver turnObserver;
@@ -59,16 +61,21 @@ namespace ICI
 
         private TurnObserver playingObserver = null;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         public void addCounterListener(TurnObserver element)
         {
             turnObservers.Add(element);
         }
-        public void removeCounterListener(TurnObserver element) => turnObservers.Remove(element);
+        public void removeCounterListener(TurnObserver element)
+        {
+            fullPercentObservers.Remove(element);
+            turnObservers.Remove(element);
+        }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
 
         public void startTurnCounting()
         {
@@ -154,73 +161,38 @@ namespace ICI
 
         }
 
-        private List<DelayAction> DelayActions;
-        private List<DelayAction> delayActions
+        private Dictionary<object,(Type,string)> DelayActions;
+        private Dictionary<object,(Type, string)> delayActions
         { 
             get
             {
-                if( DelayActions == null )
-                    DelayActions = new List<DelayAction>();
+                if (DelayActions == null)
+                    DelayActions = new Dictionary<object, (Type, string)>();
 
                 return DelayActions;
             }
-            set
-            {
-                if (DelayActionPlayList == null)
-                    DelayActionPlayList = new List<DelayAction>();
-
-                DelayActionPlayList = value;
-            }
-        }
-        private List<DelayAction> DelayActionPlayList;
-        private List<DelayAction> delayActionPlayList
-        { 
-            get
-            {
-                if( DelayActionPlayList == null )
-                    DelayActionPlayList = new List<DelayAction>();
-
-                return DelayActions;
-            }
-            set
-            {
-                if( DelayActionPlayList == null )
-                    DelayActionPlayList = new List<DelayAction>();
-
-                DelayActionPlayList = value;
-            }
         }
 
-        public void addDelayAction(DelayAction delayAction)
+        public void addDelayAction<T>(object classInstance, string delayAction = "action") where T : DelayAction
         {
-            delayActions.Add(delayAction);
+            delayActions.Add(classInstance,(typeof(T),delayAction));
             Debug.Log(fullPercentObservers.Count);
-        }
-
-        private List<DelayAction> sortAndClearDelayActionsPlayList()
-        {
-            var newDelayActionsPlayList =
-                from delayAction in delayActionPlayList
-                orderby (delayAction.delay - delayAction.fullInDelay)
-                select delayAction;
-
-            delayActionPlayList.Clear();
-
-            return newDelayActionsPlayList.ToList();
         }
 
         private void addDelayValueAtDelayActionList()
         {
             int flag = 0;
-            while (delayActions.Count > flag)
+            List<object> delayActionKeys = delayActions.Keys.ToList();
+            while (delayActionKeys.Count > flag)
             {
-                delayActions[flag].fullInDelay += 1;
+                ((DelayAction)delayActionKeys[flag]).fullInDelay += 1;
 
-                if (delayActions[flag].delay - delayActions[flag].fullInDelay <= 0)
+                if (((DelayAction)delayActionKeys[flag]).delay - ((DelayAction)delayActionKeys[flag]).fullInDelay <= 0)
                 {
-                    delayActions[flag].GetType().GetMethod("functionName").Invoke;
-                    delayActions[flag].action();
-                    delayActions.Remove(delayActions[flag]);
+                    delayActions[delayActionKeys[flag]].Item1.GetMethod(DelayActions[delayActionKeys[flag]].Item2)
+                        .Invoke(delayActionKeys[flag], null);
+
+                    delayActionKeys.Remove(delayActionKeys[flag]);
                 }
                 else
                     flag++;

@@ -26,21 +26,29 @@ namespace ICI
         public void inputMove(string dir)
         {
 
-            if(dir == "Front")
+            if(dir == "Front" &&
+                GameMap.Instance.isRoad(orderedCharacter.pos + Pos.Front()))
             {
                 orderedCharacter.pos.addPos(0,1);
             }
-            else if(dir == "Back")
+            else if(dir == "Back" &&
+                GameMap.Instance.isRoad(orderedCharacter.pos + Pos.Back()))
             {
                 orderedCharacter.pos.addPos(0,-1);
             }
-            else if(dir == "Right")
+            else if(dir == "Right" &&
+                GameMap.Instance.isRoad(orderedCharacter.pos + Pos.Right()))
             {
                 orderedCharacter.pos.addPos(1,0);
             }
-            else if(dir == "Left")
+            else if(dir == "Left" &&
+                GameMap.Instance.isRoad(orderedCharacter.pos + Pos.Left()))
             {
                 orderedCharacter.pos.addPos(-1,0);
+            }
+            else
+            {
+                return;
             }
             orderedCharacter.applyInstancePos();
             setActive(false);

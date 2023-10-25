@@ -7,8 +7,7 @@ public class CameraStacking : MonoBehaviour
 {
     private void Start()
     {
-        var cameraData =
-            gameObject.GetComponent<Camera>().GetUniversalAdditionalCameraData();
+        var cameraData = gameObject.GetComponent<Camera>().GetUniversalAdditionalCameraData();
         cameraData.cameraStack.Add(UICanvas.Instance.getUICamera());
     }
 }

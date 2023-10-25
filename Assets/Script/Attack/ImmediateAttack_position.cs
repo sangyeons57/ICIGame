@@ -43,7 +43,7 @@ namespace ICI
             attackClassInstance.Start();
 
             //¼±µô
-            SpeedCounter.Instance.addDelayAction(attackClassInstance);
+            SpeedCounter.Instance.addDelayAction<ImmediateAttack_position>(attackClassInstance);
 
             return attackClassInstance;
         }

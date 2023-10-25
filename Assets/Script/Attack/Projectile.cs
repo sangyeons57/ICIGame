@@ -49,7 +49,6 @@ namespace ICI
             this.isActivate = true;
 
             SpeedCounter.Instance.addCounterListener(this);
-            Debug.Log(speed);
         }
         static public Projectile Attack(Pos pos, Pos move, int damage, int maxDistance, bool penetrate, int speed, params Type[] targets)
         {
@@ -63,7 +62,6 @@ namespace ICI
 
         private void Move()
         {
-            Debug.Log("Move");
             if (!isActivate) return; 
             this.pos += move;
             moveCount++;
@@ -115,6 +113,7 @@ namespace ICI
         
         private void DeleteProcess()
         {
+            Debug.Log("delete");
             SpeedCounter.Instance.removeCounterListener(this);
             this.isActivate = false;
             GameObject.Destroy(instance);
@@ -122,7 +121,6 @@ namespace ICI
 
         public void action()
         {
-            Debug.Log("action");
             //현제위치 공격
             List<LifeBaseObject> attackTargets = getListOfTargets();
             if (attackTargets.Count > 0) attack(attackTargets);
@@ -134,9 +132,10 @@ namespace ICI
             attackTargets = getListOfTargets();
             if (attackTargets.Count > 0) attack(attackTargets);
 
-            SpeedCounter.Instance.finishAction();
-
+            Debug.Log(moveCount + " " + maxDistance);
             if(moveCount > maxDistance) DeleteProcess();
+
+            SpeedCounter.Instance.finishAction();
         }
 
         public void startOwnTurn()
