@@ -52,6 +52,7 @@ namespace ICI
 
         override public void dead()
         {
+            Debug.Log("dead Enemy");
         }
     }
 }

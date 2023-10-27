@@ -41,7 +41,7 @@ namespace ICI
             switch (this.stage)
             {
                 case 1:
-                    enemyList.Add(new Enemy1(new Pos(0, 4), 10, 2).setInstance("Cube").applyInstancePos());
+                    enemyList.Add(new Enemy1(new Pos(0, 4), 1, 2).setInstance("Cube").applyInstancePos());
                     break;
                 default:
                     Debug.LogError("this is not exist stage");

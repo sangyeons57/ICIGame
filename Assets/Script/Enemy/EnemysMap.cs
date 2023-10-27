@@ -125,6 +125,11 @@ namespace ICI
             return characterPosList;
         }
 
+        public bool isRemovedAll()
+        {
+            return (Map.Count == 0);
+        }
+
         public override string ToString()
         {
             string str = " -CharacterMap- \n";

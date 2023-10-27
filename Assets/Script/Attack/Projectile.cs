@@ -60,11 +60,18 @@ namespace ICI
 
 
 
-        private void Move()
+        private bool Move()
         {
-            if (!isActivate) return; 
+            if (!isActivate) return false; 
             this.pos += move;
             moveCount++;
+
+            if (GameMap.Instance.isWall(this.pos))
+            {
+                DeleteProcess();
+                return false;
+            }
+            else return true;
         }
 
         public Projectile setResource(string path)
@@ -113,7 +120,6 @@ namespace ICI
         
         private void DeleteProcess()
         {
-            Debug.Log("delete");
             SpeedCounter.Instance.removeCounterListener(this);
             this.isActivate = false;
             GameObject.Destroy(instance);
@@ -123,16 +129,15 @@ namespace ICI
         {
             //현제위치 공격
             List<LifeBaseObject> attackTargets = getListOfTargets();
-            if (attackTargets.Count > 0) attack(attackTargets);
 
-            Move();
+            bool isMoveNormally = Move();
+
             applyInstancePos();
 
             //이동위치 공격
             attackTargets = getListOfTargets();
             if (attackTargets.Count > 0) attack(attackTargets);
 
-            Debug.Log(moveCount + " " + maxDistance);
             if(moveCount > maxDistance) DeleteProcess();
 
             SpeedCounter.Instance.finishAction();

@@ -23,6 +23,7 @@ namespace ICI
 
         public AITrace(Pos objectPos,int detectLimitSize, int distanceToPurpose) 
         {
+            if (detectLimitSize <= 1) Debug.LogError("detectLimitSize must be more than 1");
             this.objectPos = objectPos;
             this.detectLimitSize = detectLimitSize;
             this.distanceToPurpose = distanceToPurpose;

@@ -259,7 +259,7 @@ namespace ICI
         {
             List<Checker> checkers = new List<Checker>();
             foreach (Pos pos in CharactersMap.Instance.getAllCharacterPos())
-                if (Checker.getCheckerByPos(pos) != null)
+                if (Checker.getCheckerByPos(pos) != null) 
                     checkers.Add(Checker.getCheckerByPos(pos));
 
             return checkers;
